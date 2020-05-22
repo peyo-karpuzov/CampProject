@@ -1,0 +1,11 @@
+<%- include("partials/header") %> 
+
+<div class="container">
+    <div class="m-center">
+        <h1 class="center">This is <%= campground.name %></h1>
+        <img src="<%= campground.image %>" alt="<%= campground.name %> ">
+        <p><%= campground.description %></p>
+    </div>
+</div>
+
+<%- include("partials/footer") %>
