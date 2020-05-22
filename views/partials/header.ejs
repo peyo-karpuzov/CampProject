@@ -9,3 +9,17 @@
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.2/css/all.css">
 </head>
 <body>
+    <nav>
+        <ul>
+            <li><a href="/campgrounds"><img class="homeIcon" src="/pictures/pot-on-fire.png"></a></li>
+            <% if (currentUser) { %> 
+                <li><a href="/new">New post</a></li>
+                <li><a class="navRight" href="/logout">Log out</a></li>
+                <li><a class="navRight" href="#">Welcome <%= currentUser.username %> </a></li>
+            <% } else { %>
+                <li><a href="/login">To post, please sign in :)</a></li>
+                <li><a class="navRight" href="/login">Log in</a></li>
+                <li><a class="navRight" href="/register">Register</a></li>
+            <% } %>
+        </ul>
+    </nav>
