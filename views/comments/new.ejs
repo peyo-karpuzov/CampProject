@@ -1,0 +1,22 @@
+<%- include("../partials/header") %> 
+
+<div class="container center">
+    <h1>Leave a comment</h1>
+
+    <form action="/campgrounds/<%= campgroundId %>/comments" method="POST">
+        <div class="">
+            <input class="form" type="text" name="comment[text]" placeholder="leave your comment here">
+        </div>
+
+        <div class="">
+            <input class="form" type="text" name="comment[author]" placeholder="your name">
+        </div> 
+
+        <div class="">
+            <button class="form">That's my comment,here</button>
+        </div>
+    </form>
+    <a href="/campgrounds">Back to campgrounds</a>
+</div>
+
+<%- include("../partials/footer") %> 

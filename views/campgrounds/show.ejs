@@ -1,0 +1,20 @@
+<%- include("../partials/header") %> 
+
+<div class="container">
+    <div class="m-center card">
+        <img src="<%= campground.image %>" alt="<%= campground.name %> ">
+        <h1 class="center">This is <%= campground.name %></h1>
+        <p><%= campground.description %></p>
+    </div>
+    <div class="m-center card">
+        <form action="/campgrounds/<%= campground._id %>/comments/new" method="GET">
+            <button class="form">Leave a comment</button>
+        </form>
+        <% campground.comments.forEach((comment) => { %>
+            <h5><%= comment.author %></h5>
+            <p><%= comment.text %> </p>
+        <% }) %> 
+    </div>
+</div>
+
+<%- include("../partials/footer") %>

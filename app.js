@@ -5,7 +5,8 @@ const express = require("express"),
       mongoose = require("mongoose"),
       passport = require("passport"),
       LocalStrategy = require("passport-local"),
-      session = require("express-session");
+      session = require("express-session"),
+      seedDB = require("./models/seedData");
 
 
 // app configuration
@@ -15,19 +16,13 @@ app.set("view engine", "ejs");
 app.use(express.static(__dirname + "/public"));
 app.use(bodyParser.urlencoded({extended: true}));
 
-// app variables
-let campingSites = [
-    {name: "Rila Lakes Area Camping Site", image: "/pictures/rilaLakes.png"},
-    {name: "Smolyan Lakes Area", image: "/pictures/smolyanLakes.jpg"},
-    {name: "Botev Peak", image: "/pictures/botevPeak.jpg"},
-    {name: "Central Denube area", image: "/pictures/centralDanube.jpg"},
-    {name: "Sofia outskirts", image: "/pictures/sofiaOutskirts.jpg"}
-];
-
 // DB
 mongoose.connect("mongodb://localhost:27017/campgrounds", {useNewUrlParser: true, useUnifiedTopology: true});
 let Campground = require("./models/campground"),
+    Comment = require("./models/comment"),
     User = require("./models/user");
+
+seedDB();
 
 // Authentication config
 app.use(session({
@@ -89,8 +84,7 @@ app.get("/campgrounds", function(req, res) {
             console.log("Some sort of error, man! :(")
             console.log(err);
         } else {
-            console.log(campground);
-            res.render("index", {camps: campground});
+            res.render("campgrounds/index", {camps: campground});
         }
     });
 });
@@ -106,22 +100,40 @@ app.post("/campgrounds", isLoggedIn, function(req, res) {
             console.log("There is an error: something happened.");
             console.log(err);
         } else {
-            console.log(campground);
             res.redirect("/campgrounds");
         }
     });
 });
 
 app.get("/campgrounds/new", isLoggedIn, function(req, res) {
-    res.render("new");
+    res.render("campgrounds/new");
 });
 
 app.get("/campgrounds/:id", function(req, res) {
-    Campground.findById(req.params.id, function(err, campground) {
+    Campground.findById(req.params.id).populate("comments").exec(function(err, campground) {
         if (err) {
             console.log(err);
         } else {
-            res.render("show", {campground: campground});
+            res.render("campgrounds/show", {campground: campground});
+        }
+    });
+});
+
+app.get("/campgrounds/:id/comments/new", (req, res) => {
+    res.render("comments/new", {campgroundId: req.params.id});
+});
+
+app.post("/campgrounds/:id/comments", (req, res) => {
+    Campground.findById(req.params.id, function(err, camp) {
+        if (err) {
+            console.log(err);
+            console.log("ERROR BABY");
+        } else {
+            let newComment = new Comment(req.body.comment);
+            newComment.save();                        
+            camp.comments.push(newComment);
+            camp.save();            
+            res.redirect("/campgrounds/" + req.params.id);
         }
     });
 });

@@ -1,4 +1,4 @@
-<%- include("partials/header") %> 
+<%- include("../partials/header") %> 
 
 <div class="container">
     <h1><i class="fas fa-campground"></i> This is the campgrounds page <i class="fas fa-campground"></i></h1>
@@ -10,11 +10,11 @@
         <div class="card col">
             <h2 class="center"><%= camp.name %></h2>
             <img src="<%= camp.image %>" alt="<%= camp.name %>">
-            <form action="/campgrounds/<%= camp._id %>"> 
+            <form action="/campgrounds/<%= camp._id %>" method="GET"> 
                 <button class="form">See details</button>
             </form>
         </div>
     <% }); %> 
 </div>
 
-<%- include("partials/footer") %> 
+<%- include("../partials/footer") %> 
